@@ -116,6 +116,7 @@
         </ul>
     </div>
 
+
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container">
             <a class="navbar-brand" href="{{ route('news.index') }}">
@@ -149,6 +150,7 @@
             </div>
         </div>
     </nav>
+
 
     <div class="content">
         @yield('content')

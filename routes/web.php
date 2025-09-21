@@ -148,11 +148,11 @@ Route::post('/product-submit', function (Request $request) {
     ]);
 
     // ตรวจสอบว่ามีการอัปโหลดรูปภาพ
-    if ($request->hasFile('image')) {
-        $imagePath = $request->file('image')->store('uploads', 'public');
-        $url = Storage::url($imagePath);
-        $data["image"] =$url;
-    }
+    // if ($request->hasFile('image')) {
+    //     $imagePath = $request->file('image')->store('uploads', 'public');
+    //     $url = Storage::url($imagePath);
+    //     $data["image"] =$url;
+    // }
 
     // บันทึกข้อมูลในฐานข้อมูล
     Product::create($data);
@@ -167,6 +167,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 });
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/teacher', function () {
+        return view('teacher');
+    });
+});
+
+
+
+
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
