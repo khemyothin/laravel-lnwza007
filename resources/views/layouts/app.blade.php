@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,6 +25,7 @@
     <link rel="stylesheet" href="{{ asset('css/theme.css') }}">
 
 </head>
+
 <body class="min-vh-100 position-relative">
 
     <style>
@@ -48,15 +50,22 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
-    
+
         .floating-btn:hover {
             background-color: #0056b3;
         }
     </style>
-    <!-- ปุ่ม + ที่ลอยอยู่ -->
-    <a href="{{ route('news.create') }}">
-        <div class="floating-btn py-auto pb-2"> + </div>
-    </a>
+
+    @auth
+        @if (auth()->user()->role == 'admin')
+
+            <!-- ปุ่ม + ที่ลอยอยู่ -->
+            <a href="{{ route('news.create') }}">
+                <div class="floating-btn py-auto pb-2"> + </div>
+            </a>
+
+        @endif
+    @endauth
 
     <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
         <symbol id="check2" viewBox="0 0 16 16">
@@ -116,21 +125,23 @@
         </ul>
     </div>
 
-
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container">
             <a class="navbar-brand" href="{{ route('news.index') }}">
-                <img src="https://cdn.freebiesupply.com/logos/large/2x/sports-news-logo-svg-vector.svg" alt="logo" width="45">
+                <img src="https://cdn.freebiesupply.com/logos/large/2x/sports-news-logo-svg-vector.svg" alt="logo"
+                    width="45">
                 <span class="ms-2">Sport News</span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                     <li class="nav-item text-center">
-                        <a class="nav-link {{ request()->routeIs('news.index') ? 'active' : '' }}" aria-current="page" href="{{ route('news.index') }}">หน้าหลัก</a>
+                        <a class="nav-link {{ request()->routeIs('news.index') ? 'active' : '' }}" aria-current="page"
+                            href="{{ route('news.index') }}">หน้าหลัก</a>
                     </li>
                     <!-- <li class="nav-item">
                         <a class="nav-link" href="#">menu 2</a>
@@ -141,38 +152,53 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">menu 4</a>
                     </li> -->
-                    
+
                 </ul>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
+
+                @auth
+                    <div class="me-3">{{ Auth::user()->email }}</div>
+                    <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                        @csrf
+                        <button type="submit" class="btn btn-outline-danger">
+                            ออกจากระบบ
+                        </button>
+                    </form>
+                @endauth
+
+
+                @guest
+                    <div class="d-flex">
+                        <a href="{{ route('login') }}" class="btn btn-primary me-2">เข้าสู่ระบบ</a>
+                        <a href="{{ route('register') }}" class="btn btn-outline-warning">สมัครสมาชิก</a>
+                    </div>
+                @endguest
+
             </div>
         </div>
     </nav>
 
-
     <div class="content">
         @yield('content')
     </div>
-    
+
     <footer class="py-3 shadow-lg container-fluid">
         <ul class="nav justify-content-center pb-3">
-            <li class="nav-item"><a href="{{ route('news.index') }}" class="nav-link px-2 text-body-secondary">หน้าหลัก</a></li>
+            <li class="nav-item"><a href="{{ route('news.index') }}"
+                    class="nav-link px-2 text-body-secondary">หน้าหลัก</a></li>
             <!-- <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">menu 2</a></li>
             <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">menu 3</a></li>
             <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">menu 4</a></li> -->
         </ul>
         <div class="row pb-3">
             <div class="col-lg-12 text-center">
-                เว็บไซต์นี้จัดทำขึ้นเพื่อใช้ในการศึกษาเท่านั้น เนื้อหาโดย : 
+                เว็บไซต์นี้จัดทำขึ้นเพื่อใช้ในการศึกษาเท่านั้น เนื้อหาโดย :
                 <a href="https://www.sanook.com/sport/" target="_blank">
                     <img src="https://s.isanook.com/sr/0/images/logo-sanook-n.svg" alt="sanook-logo" width="100">
                 </a>
             </div>
         </div>
     </footer>
-    
+
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js"></script>
@@ -181,6 +207,7 @@
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
     </script>
-    
+
 </body>
+
 </html>

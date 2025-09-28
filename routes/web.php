@@ -7,7 +7,13 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Http\Controllers\NewsController;
 
-Route::get('/', function () {
+$roles = ["admin", "guest"];
+
+Route::get('/', function() {
+    return view("welcome/index");
+})->name('custom.first.page');
+
+Route::get('/laravel', function () {
     return Inertia::render('welcome');
 })->name('home');
 
@@ -41,7 +47,7 @@ Route::get("/gallery/cat", function () {
 // - Week 3
 // ---------------------------------------------------------------------------------------------------------------------------------------------------->>
 
-Route::get('/index', function () {
+Route::get('/active', function () {
     return view('active/index');
 })->name('index');
 
@@ -77,23 +83,23 @@ Route::get('query/sql', function () {
     $products = DB::select("SELECT * FROM products");
     // $products = DB::select("SELECT * FROM products WHERE price > 100");
     return view('query-test', compact('products'));
-});
+})->name('query.sql');
 
 Route::get('query/builder', function () {
     $products = DB::table('products')->get();
     // $products = DB::table('products')->where('price', '>', 100)->get();
     return view('query-test', compact('products'));
-});
+})->name('query.builder');
 
 Route::get('query/orm', function () {
     $products = Product::get();
     // $products = Product::where('price', '>', 100)->get();
     return view('query-test', compact('products'));
-});
+})->name('query.orm');
 
-Route::get('product/form', function () {
-    //
-})->name("product.form");
+// Route::get('product/form', function () {
+//     //
+// })->name("product.form");
 
 Route::get('barchart', function () {    
     return view('barchart');
@@ -104,19 +110,25 @@ Route::get('barchart', function () {
 // ---------------------------------------------------------------------------------------------------------------------------------------------------->>
 
 // Create
-Route::get('/news/sport/create', [NewsController::class, 'create'])->name('news.create');
-Route::post('/news/sport', [NewsController::class, 'store'])->name('news.store');
+Route::middleware(['auth','role:admin'])->group(function () {
+    Route::get('/news/sport/create', [NewsController::class, 'create'])->name('news.create');
+    Route::post('/news/sport', [NewsController::class, 'store'])->name('news.store');
+});
 
 // Read
 Route::get('/news/sport', [NewsController::class, 'index'])->name('news.index');
 Route::get('/news/sport/{id}', [NewsController::class, 'show'])->name('news.show');
 
 // Update
-Route::get('/news/sport/edit/{id}', [NewsController::class, 'edit'])->name('news.edit');
-Route::put('/news/sport/{id}', [NewsController::class, 'update'])->name('news.update');
+Route::middleware(['auth','role:admin'])->group(function () {
+    Route::get('/news/sport/edit/{id}', [NewsController::class, 'edit'])->name('news.edit');
+    Route::put('/news/sport/{id}', [NewsController::class, 'update'])->name('news.update');
+});
 
 // Delete
-Route::delete('/news/sport/{id}', [NewsController::class, 'destroy'])->name('news.destroy');
+Route::middleware(['auth','role:admin'])->group(function () {
+    Route::delete('/news/sport/{id}', [NewsController::class, 'destroy'])->name('news.destroy');
+});
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------->>
 // - FORM
@@ -148,11 +160,11 @@ Route::post('/product-submit', function (Request $request) {
     ]);
 
     // ตรวจสอบว่ามีการอัปโหลดรูปภาพ
-    // if ($request->hasFile('image')) {
-    //     $imagePath = $request->file('image')->store('uploads', 'public');
-    //     $url = Storage::url($imagePath);
-    //     $data["image"] =$url;
-    // }
+    if ($request->hasFile('image')) {
+        $imagePath = $request->file('image')->store('uploads', 'public');
+        $url = Storage::url($imagePath);
+        $data["image"] =$url;
+    }
 
     // บันทึกข้อมูลในฐานข้อมูล
     Product::create($data);
@@ -162,21 +174,23 @@ Route::post('/product-submit', function (Request $request) {
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------->>
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
-});
-
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth','role:admin,teacher'])->group(function () {
     Route::get('/teacher', function () {
         return view('teacher');
     });
 });
 
+Route::middleware(['auth','role:admin,student'])->group(function () {
+    Route::get('/student', function () {
+        return view('student');
+    });
+});
 
-
-
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('dashboard', function () {
+        return Inertia::render('dashboard');
+    })->name('dashboard');
+});
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
