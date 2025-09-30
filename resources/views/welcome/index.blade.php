@@ -34,8 +34,8 @@
             <hr class="border border-secondary border-1 opacity-50 mt-3">
             <div class="col-lg-12 text-center">
                 <div class="row px-lg-5">
-                    <div class="col-lg-6 text-lg-end mb-2">ชื่อ-สกุล : เชิดศักดิ์  คำไล้</div>
-                    <div class="col-lg-6 text-lg-start mb-2">รหัสนักศึกษา : 67222420006</div>
+                    <div class="col-lg-6 text-lg-end mb-2">ชื่อ-สกุล : เขมโยธิน สีทองเสือ</div>
+                    <div class="col-lg-6 text-lg-start mb-2">รหัสนักศึกษา : 67222420010</div>
                     <div class="col-lg-6 text-lg-end mb-2">สาขาวิชา : วิทยาการคอมพิวเตอร์</div>
                     <div class="col-lg-6 text-lg-start mb-2">คณะ : วิทยาศาสตร์และเทคโนโลยี</div>
                     <div class="col-lg-12 mb-2">มหาวิทยาลัยราชภัฏวไลยอลงกรณ์ ในพระบรมราชูปถัมภ์</div>
