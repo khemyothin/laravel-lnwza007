@@ -13,7 +13,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg text-center my-5">
-                <h1>เขมโยธิน สีทองเสือ 67222420010</h1>
+                <h1>เชิดศักดิ์ คำไล้ 67222420006</h1>
             </div>
         </div>
         <div class="row row-cols-1 row-cols-md-3 g-4">
