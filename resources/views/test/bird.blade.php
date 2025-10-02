@@ -13,7 +13,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg text-center my-4">
-                <h1>เชิดศักดิ์ คำไล้ 67222420006</h1>
+                <h1>เขมโยธิน สีทองเสือ 67222420010</h1>
             </div>
         </div>
         <div class="card">
